@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-     <!-- Add the following line -->
+     <!-- Add the following line --> 
     <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:label="first_flame_game_g_lab"

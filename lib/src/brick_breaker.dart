@@ -114,6 +114,6 @@ class BrickBreaker extends FlameGame
     return KeyEventResult.handled;
   }
 
-  @override
-  Color backgroundColor() => const Color(0xfff2e8cf); // Add this override
+  // @override
+  // Color backgroundColor() => const Color(0xfff2e8cf); // Add this override
 }

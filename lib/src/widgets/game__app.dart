@@ -1,6 +1,7 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flame_audio/flame_audio.dart';
 
 import '../brick_breaker.dart';
 import '../config.dart';
@@ -16,10 +17,32 @@ class GameApp extends StatefulWidget {
 
 class _GameAppState extends State<GameApp> {
   late final BrickBreaker game;
+
   @override
   void initState() {
     super.initState();
     game = BrickBreaker();
+    _loadAudio();
+  }
+
+  Future<void> _loadAudio() async {
+    // Preload your audio files
+    await FlameAudio.audioCache
+        .loadAll(['sfx/bricks_hit.mp3', 'sfx/hit_bat.mp3']);
+  }
+
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   FlameAudio.bgm
+  //       .play('bgm.mp3', volume: 0.1); // Make sure the path is correct
+  // }
+
+  @override
+  void dispose() {
+    FlameAudio.bgm
+        .stop(); // Stop the background music when the widget is disposed
+    super.dispose();
   }
 
   @override
@@ -50,7 +73,6 @@ class _GameAppState extends State<GameApp> {
               padding: const EdgeInsets.all(16),
               child: Center(
                 child: Column(
-                  // Modify from here...
                   children: [
                     ScoreCard(score: game.score),
                     Expanded(
@@ -68,12 +90,12 @@ class _GameAppState extends State<GameApp> {
                                   ),
                               PlayState.gameOver.name: (context, game) =>
                                   const OverlayScreen(
-                                    title: 'G A M E   O V E R',
+                                    title: 'G A M E   O V E R',
                                     subtitle: 'Tap to Play Again',
                                   ),
                               PlayState.won.name: (context, game) =>
                                   const OverlayScreen(
-                                    title: 'Y O U   W O N ! ! !',
+                                    title: 'Y O U   W O N ! ! !',
                                     subtitle: 'Tap to Play Again',
                                   ),
                             },
@@ -81,6 +103,17 @@ class _GameAppState extends State<GameApp> {
                         ),
                       ),
                     ),
+                    GestureDetector(
+                      onTap: () {
+                        if (FlameAudio.bgm.isPlaying) {
+                          FlameAudio.bgm.pause();
+                        } else {
+                          FlameAudio.bgm.play('bgm.mp3', volume: 0.1);
+                        }
+                        // setState(() {});
+                      },
+                      child: Text(FlameAudio.bgm.isPlaying ? 'Stop' : 'Play'),
+                    )
                   ],
                 ),
               ),
